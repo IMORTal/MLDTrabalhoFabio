@@ -3,19 +3,19 @@
 
 
 class Imovel(object):
-    #imovel_vendido e imovel_disponivel são listas para guardar todas as instâncias da classe Imovel.    
+    #imovel_vendido, imovel_disponivel e imovel_interesse são listas para guardar todas as instâncias da classe Imovel.    
 
     imovel_vendido = []
     imovel_disponivel = []
+    imovel_interesse = []
     
     def __init__(self,endereco,bairro,area,descricao,proprietario):
         self.endereco = endereco
         self.bairro = bairro
         self.area = area
         self.descricao = descricao
-        self.proprietario_antigo = proprietario
-        self.proprietario_atual = "IMOR-Tal"
-        Imovel.adicionar_imoveis_disponiveis(self)
+        self.proprietario_atual = proprietario
+        Imovel.adicionar_imoveis_interesse(self)
         
     
     def retornar_imoveis_vendidos(self):
@@ -23,6 +23,9 @@ class Imovel(object):
     
     def retornar_imoveis_disponiveis(self):
         return Imovel.imovel_disponivel
+
+    def retornar_imoveis_interesse(self):
+        return Imovel.imovel_interesse
 
     @staticmethod
     def adicionar_imoveis_vendidos(imovelvendido):
@@ -32,4 +35,7 @@ class Imovel(object):
     def adicionar_imoveis_disponiveis(imoveldisponivel):
         Imovel.imovel_disponivel.append(imoveldisponivel)
 
-    
+    @staticmethod
+    def adicionar_imoveis_interesse(imovelinteresse):
+        Imovel.imovel_interesse.append(imovelinteresse)
+

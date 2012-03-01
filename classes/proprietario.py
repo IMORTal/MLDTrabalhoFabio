@@ -1,5 +1,6 @@
 #!/usr/bin/env python
 #-*- coding:utf-8 -*-
+
 from imoveis import Imovel
 
 class Proprietario(object):
@@ -18,10 +19,19 @@ class Proprietario(object):
         Imovel.imovel_disponivel.remove(imovel)        
         imovel.proprietario_atual = self
         Imovel.imovel_vendido.append(imovel)
-        return Imovel.imovel_vendido
+        return Imovel.imovel_vendido[len(Imovel.imovel_vendido)-1]
         
-        
-            
+    def vender_imovel(self):
+        for imovel in Imovel.imovel_interesse:
+            if imovel.proprietario_atual.nome == self.nome:
+                imovel_a_vender = imovel
+                Imovel.imovel_interesse.remove(imovel_a_vender)
+                imovel_a_vender.proprietario_antigo = imovel_a_vender.proprietario_atual
+                imovel_a_vender.proprietario_atual = "IMOR Tal"
+                Imovel.imovel_disponivel.append(imovel_a_vender)
+            else:
+                return ("Imovel não encontrado!")
+        return Imovel.imovel_disponivel[len(Imovel.imovel_disponivel)-1]
    
    
     #O StaticMethod atribui métodos a classe e não a sua instância. Sendo assim:
