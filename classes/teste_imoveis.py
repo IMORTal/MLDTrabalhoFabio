@@ -27,10 +27,9 @@ class TesteImoveis(unittest.TestCase):
 
     def teste_retornar_imoveis_vendidos(self):
         p = Proprietario(nome="Daniel",cpf="130.978.257-11",endereco="Endereco",telefone="99999999")        
-        imovel = Imovel(endereco="Dr. Manoel Landin 247",bairro="Alphaville",area=500.0,descricao="Casa",proprietario=p)
-        p.vender_imovel()                                                                                               #Proprietario vende o imovel pra imobiliaria
+        imovel = Imovel(endereco="Dr. Manoel Landin 247",bairro="Alphaville",area=500.0,descricao="Casa",proprietario=p) 
         p2 = Proprietario(nome="Luiz",cpf="cpf",endereco="Endereco",telefone="99999999")        
-        p2.comprar_imovel(imovel)
+        p2.comprar_imovel(p.vender_imovel("Dr. Manoel Landin 247")) 
         imovel.retornar_imoveis_vendidos() |should| have(1).itens             
         imovel.retornar_imoveis_vendidos()[0].bairro |should| equal_to("Alphaville")
         imovel.retornar_imoveis_vendidos()[0].endereco |should| equal_to("Dr. Manoel Landin 247")
@@ -42,7 +41,7 @@ class TesteImoveis(unittest.TestCase):
     def teste_retornar_imoveis_disponiveis(self):
         p = Proprietario(nome="Maickon",cpf="321.422.032-13",endereco="Endereco",telefone="99999999")        
         imovel = Imovel(endereco="28 de Março",bairro="Centro",area=700.0,descricao="Casa",proprietario=p)
-        p.vender_imovel()        
+        p.vender_imovel("28 de Março")        
         imovel.retornar_imoveis_disponiveis() |should| have(1).itens             
         imovel.retornar_imoveis_disponiveis()[0].bairro |should| equal_to("Centro")
         imovel.retornar_imoveis_disponiveis()[0].endereco |should| equal_to("28 de Março")

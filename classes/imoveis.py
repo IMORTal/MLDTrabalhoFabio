@@ -14,6 +14,7 @@ class Imovel(object):
         self.bairro = bairro
         self.area = area
         self.descricao = descricao
+        self.proprietario_antigo = ""
         self.proprietario_atual = proprietario
         Imovel.adicionar_imoveis_interesse(self)
         
