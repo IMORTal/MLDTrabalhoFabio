@@ -38,7 +38,7 @@ class Proprietario(object):
         if check == 1:
             return Imovel.imovel_disponivel[len(Imovel.imovel_disponivel)-1]
         else:
-            return ("Imovel não encontrado!")
+            raise ImovelNaoEncontrado ("Imovel não encontrado!")
    
     def retornar_super_vendedores(self):
         check = 0        
@@ -48,7 +48,7 @@ class Proprietario(object):
                 check = 1
                 super_vendedores.append(proprietario)
         if check == 0:
-            return ("Nenhum super vendedor encontrado")
+            raise ProprietarioNaoEncontrado("Nenhum super vendedor encontrado")
         else:
             return super_vendedores               
 
@@ -61,7 +61,7 @@ class Proprietario(object):
                 check = 1
                 super_compradores.append(proprietario)   
         if check == 0:
-            return ("Nenhum super comprador encontrado")
+            raise ProprietarioNaoEncontrado("Nenhum super comprador encontrado")
         else:        
             return super_compradores 
 
@@ -73,4 +73,8 @@ class Proprietario(object):
     def adicionar_proprietario(proprietario):
         Proprietario.proprietarios.append(proprietario)
     
-        
+class ProprietarioNaoEncontrado(Exception):
+    pass        
+
+class ImovelNaoEncontrado(Exception):
+    pass

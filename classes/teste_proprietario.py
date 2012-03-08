@@ -3,7 +3,7 @@
 
 import unittest
 from should_dsl import should
-from proprietario import Proprietario
+from proprietario import Proprietario, ProprietarioNaoEncontrado, ImovelNaoEncontrado
 from imoveis import Imovel
 
 class TesteProprietario(unittest.TestCase):
@@ -20,7 +20,7 @@ class TesteProprietario(unittest.TestCase):
         p.cpf |should| equal_to("130.978.257-11")
         p.endereco |should| equal_to("Endereco")
         p.telefone |should| equal_to("99999999")
-        p.retornar_proprietarios() |should| have(1).itens #Testando lista "Proprietario.proprietario"
+        p.retornar_proprietarios() |should| have(1).itens #Testando lista "Proprietario.proprietarios"
 
     def teste_retornar_proprietarios(self):
         p = Proprietario(nome="Lucas",cpf="cpf",endereco="Endereco",telefone="77777777")
@@ -35,7 +35,9 @@ class TesteProprietario(unittest.TestCase):
         p.vender_imovel("28 de Março").bairro |should| equal_to("Centro") #Proprietario vende o imovel pra imobiliaria
         imovel.retornar_imoveis_disponiveis() |should| have(1).itens
         imovel.retornar_imoveis_disponiveis()[0].bairro |should| equal_to("Centro") 
-        imovel_vendido = p2.comprar_imovel(imovel.retornar_imoveis_disponiveis()[0]) #Proprietario p2(Carla) compra o imovel; Funcao retorna o ultimo imovel da lista Imovel.imovel_vendido 
+        imovel_vendido = p2.comprar_imovel(imovel.retornar_imoveis_disponiveis()[0]) #Proprietario p2(Carla) compra o imovel; Funcao retorna o ultimo imovel da lista Imovel.imovel_vendido
+        Imovel.imovel_disponivel |should| have(0).itens 
+        Imovel.imovel_vendido |should| have(1).itens
         imovel_vendido.bairro |should| equal_to("Centro") 
         imovel_vendido.proprietario_atual.nome |should| equal_to("Carla")
         imovel_vendido.proprietario_antigo.nome |should| equal_to("Tereza")
@@ -43,6 +45,7 @@ class TesteProprietario(unittest.TestCase):
     
     def teste_vender_imovel(self):
         p = Proprietario(nome="Tereza",cpf="321.422.032-13",endereco="Endereco",telefone="99999999") #Cadastrando proprietario
+        (p.vender_imovel,"28 de Março") |should| throw(ImovelNaoEncontrado)
         imovel = Imovel(endereco="28 de Março",bairro="Centro",area=700.0,descricao="Casa",proprietario=p) #Cadastrando imovel
         Imovel.imovel_interesse |should| have(1).itens
         imovel_vendido = p.vender_imovel("28 de Março")
@@ -50,10 +53,11 @@ class TesteProprietario(unittest.TestCase):
         Imovel.imovel_interesse |should| have(0).itens
         Imovel.imovel_disponivel |should| have(1).itens
         imovel_vendido.proprietario_antigo.nome |should| equal_to("Tereza")
+        imovel_vendido.proprietario_atual |should| equal_to("IMOR Tal")
     
     def teste_retornar_super_vendedores(self): #Retorna proprietários que venderam mais de um imovel para a imobiliária.
         p = Proprietario(nome="Tereza",cpf="321.422.032-13",endereco="Endereco",telefone="99999999")
-        p.retornar_super_vendedores() |should| equal_to("Nenhum super vendedor encontrado")
+        p.retornar_super_vendedores |should| throw(ProprietarioNaoEncontrado)
         imovel = Imovel(endereco="28 de Março",bairro="Centro",area=700.0,descricao="Casa",proprietario=p) #Cadastrando primeiro imovel
         imovel2 = Imovel(endereco="Pelinca",bairro="Centro",area=1200.0,descricao="Casa",proprietario=p)   #Cadastrando segundo imovel     
         p.vender_imovel("28 de Março") #Vendendo primerio imovel
@@ -64,6 +68,7 @@ class TesteProprietario(unittest.TestCase):
 
     def teste_retornar_super_compradores(self):
         p = Proprietario(nome="carlos", cpf="987.994.321-12", endereco="Endereco", telefone="98989898")
+        p.retornar_super_compradores |should| throw(ProprietarioNaoEncontrado)        
         imovel = Imovel(endereco="rua 22", bairro="centro", area=800.0, descricao="casa", proprietario=p)
         imovel2 = Imovel(endereco="rua 42", bairro="centro", area=600.0, descricao="casa", proprietario=p)
         p.vender_imovel("rua 22")        
